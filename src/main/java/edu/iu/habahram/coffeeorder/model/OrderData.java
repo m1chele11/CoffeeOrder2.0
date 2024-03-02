@@ -1,4 +1,4 @@
-package edu.iu.mbarrant.coffeeorder.model;
+package edu.iu.habahram.coffeeorder.model;
 
 import java.util.List;
 

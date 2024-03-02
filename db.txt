@@ -101,3 +101,19 @@
 2.69,Dark Roast, Milk, Mocha
 2.96,Dark Roast, Milk, Mocha, Soy
 2.56,Expresso, Milk, Mocha, Soy, Whip
+2.04,Expresso, Milk, Mocha
+1.74,Expresso, Milk
+3.21,Dark Roast, Milk, Mocha, Soy, Whip
+2.05,House Blend, Milk
+2.39,Dark Roast, Milk
+1.65,House Blend
+2.31,Expresso, Milk, Mocha, Soy
+2.62,House Blend, Milk, Mocha, Soy
+1.28,Decaf
+2.50,Decaf, Milk, Mocha, Soy, Whip
+1.99,Dark Roast
+1.34,Expresso
+2.87,House Blend, Milk, Mocha, Soy, Whip
+2.69,Dark Roast, Milk, Mocha
+2.96,Dark Roast, Milk, Mocha, Soy
+2.56,Expresso, Milk, Mocha, Soy, Whip

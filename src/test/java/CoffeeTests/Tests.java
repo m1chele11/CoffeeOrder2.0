@@ -1,6 +1,7 @@
 package CoffeeTests;
 
-import edu.iu.mbarrant.coffeeorder.repository.OrderRepository;
+import edu.iu.habahram.coffeeorder.model.*;
+import edu.iu.habahram.coffeeorder.repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;

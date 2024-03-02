@@ -1,4 +1,4 @@
-package edu.iu.mbarrant.coffeeorder.model;
+package edu.iu.habahram.coffeeorder.model;
 
 public class HouseBlend extends Beverage{
 
