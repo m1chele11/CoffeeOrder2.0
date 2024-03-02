@@ -1,4 +1,4 @@
-package edu.iu.habahram.coffeeorder.model;
+package edu.iu.mbarrant.coffeeorder.model;
 
 public record Receipt(String description, float cost) {
 }

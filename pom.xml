@@ -8,7 +8,7 @@
 		<version>3.2.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>edu.iu.habahram</groupId>
+	<groupId>edu.iu.mbarrant</groupId>
 	<artifactId>coffee-order</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>coffee-order</name>
