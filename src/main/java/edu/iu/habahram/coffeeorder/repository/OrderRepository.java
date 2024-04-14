@@ -11,90 +11,81 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Repository
 public class OrderRepository {
-    private final AtomicInteger receiptIdCounter = new AtomicInteger(0);
+    private static final AtomicInteger idGen = new AtomicInteger(1);
+    private static final String DATABASE_NAME = "orders/db.txt";
+    private static final String NEW_LINE = System.lineSeparator();
 
-    float totalCost = 0.0F;
-    float totalCondimentCost = 0.0F;
+    private static void appendToFile(Path path, String content)
+            throws IOException {
+        Files.write(path,
+                content.getBytes(StandardCharsets.UTF_8),
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND);
+    }
 
-    float beverageCost = 0.0F;
 
     public Receipt add(OrderData order) throws Exception {
-
         Beverage beverage = null;
         switch (order.beverage().toLowerCase()) {
             case "dark roast":
                 beverage = new DarkRoast();
-                beverageCost += beverage.cost();
+                break;
+            case "house blend":
+                beverage = new HouseBlend();
+                break;
+            case "espresso":
+                beverage = new Espresso();
                 break;
             case "decaf":
                 beverage = new Decaf();
-                beverageCost += beverage.cost();
-                break;
-            case "expresso":
-                beverage = new Expresso();
-                beverageCost += beverage.cost();
-                break;
-            case "houseblend":
-                beverage = new HouseBlend();
-                beverageCost += beverage.cost();
                 break;
         }
         if (beverage == null) {
             throw new Exception("Beverage type '%s' is not valid!".formatted(order.beverage()));
         }
+        List<String> condiments = order.condiments();
+        if(condiments != null){
+            for(String condiment : order.condiments()) {
+                switch (condiment.toLowerCase()) {
+                    case "milk":
+                        beverage = new Milk(beverage);
+                        break;
+                    case "mocha":
+                        beverage = new Mocha(beverage);
+                        break;
+                    case "soy":
+                        beverage = new Soy(beverage);
+                        break;
+                    case "whip":
+                        beverage = new Whip(beverage);
+                        break;
 
-
-        for (String condiment : order.condiments()) {
-            switch (condiment.toLowerCase()) {
-                case "milk":
-                    beverage = new Milk(beverage);
-                    totalCondimentCost += .4F;
-                    break;
-                case "mocha":
-                    beverage = new Mocha(beverage);
-                    totalCondimentCost += .3F;
-                    break;
-                case "soy":
-                    beverage = new Soy(beverage);
-                    totalCondimentCost += .27F;
-                    break;
-                case "whip":
-                    beverage = new Whip(beverage);
-                    totalCondimentCost += .25F;
-                    break;
-                default:
-                    throw new Exception("Condiment type '%s' is not valid".formatted(condiment));
+                    default:
+                        throw new Exception("Condiment type '%s' is not valid".formatted(condiment));
+                }
             }
+
         }
 
-        totalCost = beverageCost + totalCondimentCost;
-        totalCost = round(totalCost, 2);
-        //System.out.println(totalCost);
+        int rId = idGen.getAndIncrement();
+        float rCost = beverage.cost();
+        String rDescription = beverage.getDescription();
 
+        String orderLine = String.format("%d, %.2f, %s", rId, rCost, rDescription);
+        Path path = Path.of(DATABASE_NAME);
+        appendToFile(path, orderLine + NEW_LINE);
 
-
-        int receiptId = receiptIdCounter.incrementAndGet();
-        Receipt receipt = new Receipt(beverage.getDescription(), totalCost);
-
-        // Store the order in the "db.txt" file
-        storeOrderInDatabase(receipt);
-
+        Receipt receipt = new Receipt(rId, rCost, rDescription);
         return receipt;
-    }
-    private void storeOrderInDatabase(Receipt receipt) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("db.txt", true))) {
-            String orderInfo = String.format("%.2f,%s%n", receipt.cost(), receipt.description());
-            writer.write(orderInfo);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static float round(float d, int decimalPlace) {
-        BigDecimal bd = new BigDecimal(Float.toString(d));
-        bd = bd.setScale(decimalPlace, RoundingMode.HALF_UP);
-        return bd.floatValue();
     }
 }

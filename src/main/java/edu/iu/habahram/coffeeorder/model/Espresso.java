@@ -1,6 +1,6 @@
 package edu.iu.habahram.coffeeorder.model;
 
-public class Expresso extends Beverage{
+public class Espresso extends Beverage{
 
         @Override
         public String getDescription() {
